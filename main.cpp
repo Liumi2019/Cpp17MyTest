@@ -1,8 +1,12 @@
 #include <iostream>
-#include "Cpp17MyTest/Cpp17MyTest.h"
+
+#include "Cpp17MyTest.h"
+#include "Cpp17Lambda.h"
+#include "structToString.h"
+#include "testStructToString.h"
 
 int main()
 {
-	testVector();
+	test_structToString();
 	return 0;
 }
