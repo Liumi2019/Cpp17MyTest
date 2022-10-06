@@ -205,7 +205,7 @@ void lambdaValue() {
 	auto aPrint = [&a](int b) { return a + b; };
 
 	a = 100;
-	std::cout << aPrint(60) << std::endl;  // 110 不是 160
+	std::cout << aPrint(60) << std::endl;  // 160
 }
 
 ```
@@ -214,7 +214,7 @@ void lambdaValue() {
 允许使用任意类型，C++14可用
 
 ```C++
-	auto a = [](auto x, auto y) {
+	auto a = [](auto x, auto y) {  // C++ 14 之后支持
 		return x + y;
 	};
 ```

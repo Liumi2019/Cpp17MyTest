@@ -20,11 +20,11 @@ struct Face {
 
 }
 
+// 定义返回值说明
 enum class RunningState {
 	Running_ERROR = -1,
 	Running_OK = 0
 };
-
 
 RunningState splitStr(const std::string& str, const std::string& pattern, std::vector<std::string>& strVec);
 

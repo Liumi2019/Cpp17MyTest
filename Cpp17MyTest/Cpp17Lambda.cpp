@@ -13,12 +13,12 @@ void lambdaRef() {
 	auto aPrint = [&a](int b) { return a + b; };
 
 	a = 100;
-	std::cout << aPrint(60) << std::endl;  // 110 不是 160
+	std::cout << aPrint(60) << std::endl;  // 160
 }
 
 void lambdaGenerics()
 {
-	auto a = [](auto x, auto y) {
+	auto a = [](auto x, auto y) {  // C++ 14 之后支持
 		return x + y;
 	};
 
