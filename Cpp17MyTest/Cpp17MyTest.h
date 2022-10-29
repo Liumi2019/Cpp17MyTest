@@ -11,10 +11,11 @@ void testVector();
 // 初始化字符串常量
 void initChar();
 
-void printChar(char* chr, const size_t& size);
+void printChar(char *chr, const size_t &size);
 
 template <class T, size_t SIZE>
-size_t arrySize(T(&a)[SIZE]) {
+size_t arrySize(T (&a)[SIZE])
+{
 	return SIZE;
 }
 

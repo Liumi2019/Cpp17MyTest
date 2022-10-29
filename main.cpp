@@ -1,13 +1,14 @@
 #include <iostream>
+#include <vector>
 
-#include "Cpp17MyTest.h"
 #include "Cpp17Lambda.h"
+#include "Cpp17MyTest.h"
 #include "structToString.h"
 #include "testStructToString.h"
-#include "UsingClass.h"
 
 int main()
 {
-	test_usingClass();
+	std::cout << "Start ..." << std::endl;
+
 	return 0;
 }
