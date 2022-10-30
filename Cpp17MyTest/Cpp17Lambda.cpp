@@ -1,4 +1,4 @@
-﻿#include "Cpp17Lambda.h"
+#include "Cpp17Lambda.h"
 
 void lambdaValue()
 {

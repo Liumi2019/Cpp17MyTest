@@ -5,10 +5,12 @@
 #include "Cpp17MyTest.h"
 #include "structToString.h"
 #include "testStructToString.h"
+#include "CppThread.h"
 
-int main()
-{
+int main() {
 	std::cout << "Start ..." << std::endl;
+
+	test_thread();
 
 	return 0;
 }
