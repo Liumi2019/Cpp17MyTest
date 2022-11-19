@@ -2,7 +2,7 @@
 #include <vector>
 
 #include "Cpp17Lambda.h"
-#include "Cpp17MyTest.h"
+#include "Cpp17NewFeature.h"
 #include "structToString.h"
 #include "testStructToString.h"
 #include "CppThread.h"
