@@ -236,5 +236,78 @@ funcF[0](20);  // 使用数组管理函数对象
 
 ```
 
+## 三、C++ 多线程
+
+### 1. 创建一个线程
+C++ 多线程类 thread 类常用的构造函数：
+``` C++ 
+// Fn 为执行函数，Args... 可变参数
+template<class Fn, class... Args>
+explicit thread(Fn&& fn, Args&&... args);
+
+// 一个例子
+// 线程函数入口
+void fun_thread1(int aSize, bool isRun) {
+	for (int a = 0; a < aSize; a++) {
+		std::cout << "a = " << a << " ";
+		if (!isRun) {
+			std::cout << std::endl;
+			return;
+		}
+	}
+	std::cout << std::endl;
+}
+// 创建一个线程，参数可以任意个
+std::thread t1(fun_thread1, 20, isRun);
+
+```
+
+thread 类没有复制构造函数，但可以使用移动构造函数，将使用权转移。
 
 
+``` C++
+
+std::thread&& func_return_thread() {
+	std::thread tempT3(fun_thread1, 100, true);
+	// tempT3 是一个将亡值
+	return std::move(tempT3);
+}
+
+std::thread t3 = func_return_thread();
+
+``` 
+
+### 2. 线程同步
+C++ 线程同步主要依赖互斥锁、条件变量
+#### 2.1 互斥锁
+互斥锁头文件 mutex, 常用的互斥锁包括：递归互斥锁、定时互斥锁、自动互斥锁，互斥锁包括两个成员函数：lock() 和 unlock()。
+
+``` C++
+
+mtx.lock(); // 加锁
+std::cout << "a = " << a << " ";
+mtx.unlock(); // 解锁
+
+```
+
+#### 2.2 条件变量
+多线程的条件变量必须依赖互斥锁才能保证线程同步，头文件：condtion_variable。
+
+``` C++
+mtx.lock(); // 加锁 
+cond.wait(mtx); // 等待，传入参数 mtx，运行时自带解锁操作
+mtx.unlock(); // 解锁
+
+cond.notify(); // 发送信号
+```
+
+例子，必须保证信号的执行在等待执行后，方法是通过加锁控制。
+
+``` C++
+
+thread_cond::mtx.lock(); // 锁必须在信号执行线程运行之前
+std::thread thread1(thread_cond::thread_notify); // 发送信号的线程
+thread_cond::thread_wait(); // 等待的线程，执行时会自动解锁操作
+thread_cond::mtx.unlock(); // 解锁
+
+```
