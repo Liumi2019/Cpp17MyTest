@@ -63,7 +63,8 @@ RunningState stringToFace(const std::string& str, Face& face) {
 	face.faceNum = std::stoi(strVec[1]);
 
 	const int faceSize = 5;
-	if (face.faceNum < 1 || strVec.size() != face.faceNum * faceSize + 2) {
+	decltype(strVec.size()) size = face.faceNum * faceSize + 2;
+	if (face.faceNum < 1 || strVec.size() != size) {
 		face.faceNum = 0;
 		return RunningState::Running_ERROR;
 	}

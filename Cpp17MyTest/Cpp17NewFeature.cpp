@@ -25,11 +25,12 @@ void initChar() {
 	chr[2] = '2';
 	printChar(chr, arrySize(chr));
 	printChar(const_cast<char*>(chrConst), arrySize(chrConst));
-	// std::cout << sizeof(chrAuto) / sizeof(chrAuto[0]) << std::endl;
+	// std::cout << sizeof(chrAuto) / sizeof(chrAuto[0]) << std::endl; // 编译警告提示 不能计算出长度
+	std::cout << chrAuto[0] << std::endl;
 }
 
 void printChar(char* chr, const size_t& size) {
-	int i = 0;
+	size_t i = 0;
 	while (i < size) {
 		std::cout << chr[i];
 		++i;
@@ -74,7 +75,7 @@ void useInitList() {
 	l1.pintInfo();
 }
 
-// 容器绑定
+// 结构化绑定
 void useStructuredBinding() {
 	std::tuple t1 = { "LL", 23, "boy" };
 	// name 右值引用类型

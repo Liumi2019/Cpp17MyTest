@@ -1,16 +1,12 @@
 #include <iostream>
 #include <vector>
 
-#include "Cpp17Lambda.h"
-#include "Cpp17NewFeature.h"
-#include "structToString.h"
-#include "testStructToString.h"
-#include "CppThread.h"
+#include "Cpp17MyTest/Cpp17MytestHead.h"
 
 int main() {
 	std::cout << "Start ..." << std::endl;
 
-	test_thread();
+	test_right_value::test_right_value();
 
 	return 0;
 }

@@ -97,9 +97,26 @@ InitList l1 = { 1, 3, 6, 10 };
 ### 6. 结构化绑定
 
 ```C++
-	std::tuple t1 = { "LL", 23, "boy" };
-	auto [name, age, gender] = t1;
-	std::cout << "name:" << name << ", age: " << age << ", gender: " << gender << std::endl;
+std::tuple t1 = { "LL", 23, "boy" };
+auto [name, age, gender] = t1;
+std::cout << "name:" << name << ", age: " << age << ", gender: " << gender << std::endl;
+
+// 函数返回多个值，结构体直接直接赋值等等
+struct MyPair {
+	string name;
+	size_t age;
+};
+
+MyPair makeMyPair() {
+	MyPair temp;
+	temp.name = "hello";
+	temp.age = 50;
+	return temp;
+}
+// C++ 17 结构化绑定 
+auto [name, age] = makeMyPair();
+// 引用类型 可以达到相互修改的目的
+auto& [name, age] = myPair;
 
 ```
 
@@ -177,6 +194,55 @@ void func1(T a0, Ts... a) {
 }
 
 ```
+
+### 10. 左值与右值
+左值引用，用于方便地传递函数的参数变量，如下：
+``` C++
+// 1. 引用传参，函数值变更，传入的变量同样变更
+void fun(int& val) {
+	val = 50;
+}
+
+int a = 0;
+fun(a); // a = 50，与函数的内部的变量一起变化
+
+// 2. 返回值，不能返回局部变量（右值使用场景），一般返回静态变量
+int& getStaticPool() {
+	int pool = 50;
+	return pool; // 错误，局部变量自动销毁
+	static int pool = 100;
+	return pool;
+}
+
+```
+
+右值引用，使用将亡值，局部值，延长变量的寿命
+
+``` C++
+// 1. 引用传参，函数值变更，传入的变量同样变更
+void fun(int&& val) {
+	val = 50;
+}
+
+fun(50); // 50 字面值是一个右值
+
+// 2. 变量资源转移
+
+int a = 50;
+int &&b = std::move(a); // a 应删除
+
+// 3. 返回值优化，返回一个局部变量
+int&& getStaticPool() {
+	int pool = 50;
+	return std::move(pool); // 没必要，现代的编译器已经将返回值自动优化
+}
+
+// 4. 二者不一样，第一个使用移动构造函数创建一个b3对象，第二个直接使用b2的资源，没有调用构造函数
+Base b3 = std::move(b2);
+Base&& b3 = std::move(b2);
+
+```
+
 
 
 ## 二、Lambda 表达式
