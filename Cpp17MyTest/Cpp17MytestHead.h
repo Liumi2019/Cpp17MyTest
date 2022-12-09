@@ -7,5 +7,6 @@
 #include "testStructToString.h"
 #include "CppThread.h"
 #include "Cpp17RightValue.h"
+#include "Cpp17Qualifier.h"
 
 #endif

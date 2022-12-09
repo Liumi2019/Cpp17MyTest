@@ -16,7 +16,7 @@ void testVector() {
 }
 
 // 字符串常量初始化
-void initChar() { 
+void initChar() {
 	// 弃用
 	char chr[] = "chr";
 	const char chrConst[] = "chrConst";
@@ -71,7 +71,8 @@ private:
 
 // 初始化列表
 void useInitList() {
-	InitList l1 = { 1, 3, 6, 10 };
+	// { } 内不能窄化
+	InitList l1 = { 1, 3, 6, 10, 1 };
 	l1.pintInfo();
 }
 

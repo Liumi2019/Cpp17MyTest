@@ -1,8 +1,7 @@
 # 学习 C++ 17 特性
 
 > 参考项目：
-1. changkun/modern-cpp-tutorial:
-git@github.com:changkun/modern-cpp-tutorial.git
+1. changkun/modern-cpp-tutorial: git@github.com:changkun/modern-cpp-tutorial.git
 
 > 学习笔记
 * github 地址: git@github.com:Liumi2019/Cpp17MyTest.git
@@ -89,8 +88,12 @@ public:
 private:
 	std::vector<int> vec;
 };
-
+// { } 可以保证数据不能窄化处理
 InitList l1 = { 1, 3, 6, 10 };
+
+// 定义变量时也可以这样处理，使用 {} 代替 ()调用初始化函数
+// 编译报错，不能使用 double 初始化 int
+int a{5.5};
 
 ```
 
@@ -243,7 +246,26 @@ Base&& b3 = std::move(b2);
 
 ```
 
+### 11. 后置类型推导
 
+后置类型推导可用于减少定义新类型如函数类型，元编程的类型定义
+
+``` C++
+int fun(int a) {
+	return a <= 0 ? -a : a;
+}
+// 1. 函数指针类型
+auto returnFunPtr() -> int (*) (int) {
+	return fun;
+}
+
+// 2. 元编程函数实现返回值
+template<typename T, typename U> 
+auto add(T val1, U val2) -> decltype( val1 + val2) {
+	return val1 + val2;
+}
+
+```
 
 ## 二、Lambda 表达式
 
@@ -375,5 +397,123 @@ thread_cond::mtx.lock(); // 锁必须在信号执行线程运行之前
 std::thread thread1(thread_cond::thread_notify); // 发送信号的线程
 thread_cond::thread_wait(); // 等待的线程，执行时会自动解锁操作
 thread_cond::mtx.unlock(); // 解锁
+
+```
+
+
+## 四、 成员函数限定符
+
+### 4.1 const 限定符
+
+``` C++
+
+class MyBase {
+public:
+    MyBase() { std::cout << "MyBase()" << std::endl; }
+    MyBase(const MyBase& myBase) {
+        mAge = myBase.mAge;
+        std::cout << "MyBase(const MyBase& )" << std::endl;
+    }
+    MyBase(const MyBase&& myBase) {
+        mAge = myBase.mAge;
+        std::cout << "MyBase(const MyBase&& )" << std::endl;
+    }
+    MyBase& operator=(const MyBase& myBase) {
+        mAge = myBase.mAge;
+        std::cout << "operator=(const MyBase& )" << std::endl;
+        return (*this);
+    }
+    MyBase& operator=(const MyBase&& myBase) {
+        mAge = myBase.mAge;
+        std::cout << "operator=(const MyBase&& )" << std::endl;
+        return (*this);
+    }
+    ~MyBase() { std::cout << "~MyBase()" << std::endl; }
+
+    MyBase At(int age) const& {
+        std::cout << "At() const&" << std::endl;
+        MyBase temp;
+        temp.mAge = age;
+        return temp;
+    }
+
+    MyBase At(int age)&& {
+        std::cout << "At() &&" << std::endl;
+        mAge = age;
+        return std::move(*this);
+    }
+
+    MyBase At(int age)& {
+        std::cout << "At()&" << std::endl;
+        mAge = age;
+        return (*this);
+    }
+
+private:
+    int mAge;
+
+};
+
+// 返回一个 MyBase 对象
+MyBase makeMyBase() {
+	std::cout << "makeMyBase" << std::endl;
+	return MyBase();
+}
+void test_qualifier() {
+	MyBase myBase1;
+	MyBase& myBase1_ref = myBase1;
+	const MyBase& myBase1_cref = myBase1;
+	
+	MyBase myBase2 = myBase1_ref.At(0);  // 调用 At() &
+	MyBase myBase2_ref = myBase1_ref.At(10);  // 调用 At() &
+	MyBase myBase2_cref = myBase1_cref.At(20);  // 调用 At() const&
+	// makeMyBase() 返回一个临时对象调用 At 成员函数
+	MyBase myBase2_rref = makeMyBase().At(30);  // 调用 At()&&
+}
+
+```
+
+## 五、不能实例化的类
+
+### 5.1 纯虚类
+
+包含纯虚函数的类不能实例化，且子类必须全部实现才能实例化
+
+``` C++
+
+class base {
+public:
+	base() {;}
+	~base() {;}
+	void setNum(int num) = 0; // 纯虚函数
+};
+
+```
+
+### 5.2 构造函数、析构函数为私有
+不能实例化，不能派生子类
+
+``` C++
+
+class base {
+public:
+	base() {;}
+private:
+	~base() {;}
+};
+
+```
+
+### 5.3 析构函数为纯虚函数
+
+不能实例化，可以派生子类，且子类也不可实例化
+
+``` C++
+
+class base {
+public:
+	base() {;}
+	virtual ~base() = 0;
+};
 
 ```
