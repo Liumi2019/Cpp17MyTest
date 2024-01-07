@@ -1,15 +1,19 @@
 #include <iostream>
 #include <vector>
+#include <thread>
+#include <chrono>
 
-#include "Cpp17MyTest/Cpp17MytestHead.h"
+
+#include "Cpp17MytestHead.h"
+#include "threadLeakage.h"
 
 int main() {
 	std::cout << "Start ..." << std::endl;
 
-	test_qualifier::test_qualifier();
+	// test_qualifier::test_qualifier();
+	threadLeakage();
 
-	int a(7.5);
-	int b{ 7 };
-	std::cout << a + b << std::endl;
+	std::this_thread::sleep_for(std::chrono::seconds(20));
+	std::cout << "End." << std::endl;
 	return 0;
 }
